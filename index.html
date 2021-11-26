@@ -202,6 +202,14 @@
                                     <input id="boostTimeout" type="number" value="1" min="0" />
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    Częstość zmiany kierunków (w sek.)
+                                </td>
+                                <td>
+                                    <input id="dirInterval" type="number" value="2" min="0" />
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <div class="col">
@@ -244,6 +252,7 @@
         let boostMult = 4;
         let boostDur = 1;
         let boostTimeout = 1;
+        let dirInterval = 2;
         //
         let blocks = []; // { el: HTMLElement, id: number, sX: number, xY: number, dX: number, dY: number, boost: boolean }
         let working = false;
@@ -254,6 +263,7 @@
             boostMult = parseFloat($('#boostMult').val());
             boostDur = parseFloat($('#boostDur').val());
             boostTimeout = parseFloat($('#boostTimeout').val());
+            dirInterval = parseFloat($('#dirInterval').val());
             const count = parseInt($('#blockCount').val());
             for (let i = 1; i <= count; i++)
                 createBlock(i);
@@ -294,7 +304,7 @@
                 blocks[i].dX = getRandomDir();
                 blocks[i].dY = getRandomDir();
             }
-            await sleep(1500);
+            await sleep(dirInterval * 1000);
             if(!working) return;
             randomDir();
         }
@@ -369,7 +379,7 @@
         }
         const getRandomDir = () => {
             let dir = (Math.random() * 2) - 1;
-            if (Math.abs(dir) == 0.25) dir = Math.random() < 0.5 ? 1 : -1;
+            if (Math.abs(dir) == 0.3) dir = Math.random() < 0.5 ? 1 : -1;
             return dir;
         };
     </script>
