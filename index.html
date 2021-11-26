@@ -100,7 +100,6 @@
         }
 
         #start {
-            margin-top: 1rem;
             background-color: #15181e;
             color: #fff;
             border: none;
@@ -160,7 +159,7 @@
                                     Czas trwania hackowania (w sek.)
                                 </td>
                                 <td>
-                                    <input id="hackTime" type="number" value="4" min="1" />
+                                    <input id="hackTime" type="number" value="5" min="1" />
                                 </td>
                             </tr>
                             <tr>
@@ -268,6 +267,7 @@
             working = true;
             window.requestAnimationFrame(draw);
             randomBoost();
+            randomDir();
             await sleep(parseFloat($('#numHide').val()) * 1000);
             clickable = true;
             blocks.forEach(b => b.el.css({ color: 'transparent' }));
@@ -282,12 +282,21 @@
             if (!working) return;
             const id = Math.floor(Math.random() * blocks.length);
             blocks[id].boost = true;
-            blocks[id].dX = randomDir();
-            blocks[id].dY = randomDir();
             await sleep(boostTimeout * 1000);
             if (!working) return;
             blocks[id].boost = false;
             randomBoost();
+        }
+        async function randomDir(){
+            for(let i=0; i < blocks.length; i++){
+                await sleep(100);
+                if(!working) return;
+                blocks[i].dX = getRandomDir();
+                blocks[i].dY = getRandomDir();
+            }
+            await sleep(1500);
+            if(!working) return;
+            randomDir();
         }
         //
         let start = null;
@@ -335,7 +344,7 @@
             $game.append($b);
             blocks.push({
                 el: $b, id, x, y,
-                dX: randomDir(), dY: randomDir(),
+                dX: getRandomDir(), dY: getRandomDir(),
                 sX: 1, sY: 1
             });
         }
@@ -358,7 +367,7 @@
             $endOverlay.hide();
             $settingsOverlay.show();
         }
-        const randomDir = () => {
+        const getRandomDir = () => {
             let dir = (Math.random() * 2) - 1;
             if (dir < 0 && dir > -0.5) dir = -0.5;
             if (dir > 0 && dir < 0.5) dir = 0.5;
