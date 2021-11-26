@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hack</title>
+    <meta charset="utf-8" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            height: 100vh;
+            width: 100vw;
+            font-weight: 100;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: #000;
+        }
+
+        .bg{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://images.alphacoders.com/561/561749.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(6px) brightness(40%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 820px;
+            height: 460px;
+            background-color: #232833;
+            position: relative;
+        }
+
+        .overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #game {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon {
+            font-size: 3rem;
+        }
+
+        .text {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .small {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .block {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background-color: #213856;
+            user-select: none;
+        }
+
+        .block:hover {
+            cursor: pointer;
+        }
+
+        input{
+            background-color: #15181e;
+            color: #fff;
+            border: none;
+        }
+
+        #start {
+            margin-top: 1rem;
+            background-color: #15181e;
+            color: #fff;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #start:hover{
+            background-color: #2a303c;
+        }
+
+        .settings{
+            width: 100%;
+        }
+
+        .row{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .col{
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .col-2{
+            flex: 2;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="bg"></div>
+    <div class="container">
+        <div class="overlay" id="overlay">
+            <div class="settings">
+                <div class="row">
+                    <table class="col-2">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Ilość kafelków
+                                </td>
+                                <td>
+                                    <input id="blockCount" type="number" value="6" min="1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Czas trwania hackowania (w sek.)
+                                </td>
+                                <td>
+                                    <input id="hackTime" type="number" value="4" min="1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Prędkość podstawowa
+                                </td>
+                                <td>
+                                    <input id="baseSpeed" type="number" value="2" min="1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Czas widoczności cyfr (w sek.)
+                                </td>
+                                <td>
+                                    <input id="numHide" type="number" value="4" min="1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Mnożnik przyśpieszenia
+                                </td>
+                                <td>
+                                    <input id="boostMult" type="number" value="3" min="1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Czas trwania przyśpieszenia (w sek.)
+                                </td>
+                                <td>
+                                    <input id="boostDur" type="number" value="1" min="0" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Czas odnowienia przyśpieszenia (w sek.)
+                                </td>
+                                <td>
+                                    <input id="boostTimeout" type="number" value="1" min="0" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col">
+                        <button id="start">Start</button>
+                    </div>
+                </div>
+            </div>
+            <div class="start" style="display: none">
+                <i class="icon fas fa-user-secret"></i>
+                <div class="text">
+                    Finger Print Not Recognized
+                    <div class="small">Proof of Training Required</div>
+                </div>
+            </div>
+            <div class="fail" style="display: none">
+                <i class="icon fas fa-user-secret"></i>
+                <div class="text">
+                    Failed Security Clearance
+                </div>
+            </div>
+            <div class="end" style="display: none">
+                <i class="icon fas fa-user-secret"></i>
+                <div class="text">
+                    Security Clearance Accepted
+                </div>
+            </div>
+        </div>
+        <div id="game" style="display: none"></div>
+    </div>
+    <script>
+        const sleep = (t) => new Promise((s) => setTimeout(s, t));
+        const $overlay = $('.overlay');
+        const $settingsOverlay = $('.settings');
+        const $startOverlay = $('.start');
+        const $endOverlay = $('.end');
+        const $failOverlay = $('.fail');
+        const $game = $('#game');
+        //
+        let baseSpeed = 1;
+        let boostMult = 4;
+        let boostDur = 1;
+        let boostTimeout = 1;
+        //
+        let blocks = []; // { el: HTMLElement, id: number, sX: number, xY: number, dX: number, dY: number, boost: boolean }
+        let working = false;
+        let order = 1;
+        let clickable = false;
+        $('#start').on('click', async () => {
+            baseSpeed = parseFloat($('#baseSpeed').val());
+            boostMult = parseFloat($('#boostMult').val());
+            boostDur = parseFloat($('#boostDur').val());
+            boostTimeout = parseFloat($('#boostTimeout').val());
+            const count = parseInt($('#blockCount').val());
+            for (let i = 1; i <= count; i++)
+                createBlock(i);
+            $settingsOverlay.hide();
+            $startOverlay.show();
+            await sleep(2000);
+            $startOverlay.hide();
+            $overlay.hide();
+            $game.show();
+            order = 1;
+            working = true;
+            window.requestAnimationFrame(draw);
+            randomBoost();
+            await sleep(parseFloat($('#numHide').val()) * 1000);
+            clickable = true;
+            blocks.forEach(b => b.el.css({ color: 'transparent' }));
+            await sleep(parseFloat($('#hackTime').val()) * 1000);
+            if(working){
+                fail();
+            }
+        });
+        //
+        async function randomBoost() {
+            await sleep(boostDur * 1000);
+            if (!working) return;
+            const id = Math.floor(Math.random() * blocks.length);
+            blocks[id].boost = true;
+            blocks[id].dX = randomDir();
+            blocks[id].dY = randomDir();
+            await sleep(boostTimeout * 1000);
+            if (!working) return;
+            blocks[id].boost = false;
+            randomBoost();
+        }
+        //
+        let start = null;
+        function draw(ts) {
+            if (!start) start = ts;
+            if (!working) return;
+            const dt = ts - start;
+            //
+            for (const b of blocks) {
+                b.x += b.sX * b.dX * (b.boost ? boostMult : 1) * baseSpeed;
+                b.y += b.sY * b.dY * (b.boost ? boostMult : 1) * baseSpeed;
+                //
+                if (b.x <= 0) { b.dX *= -1; b.x = 0; }
+                else if (b.x >= 750) { b.dX *= -1; b.x = 750; }
+                if (b.y <= 0) { b.dY *= -1; b.y = 0; }
+                else if (b.y >= 390) { b.dY *= -1; b.y = 390; }
+                //
+                b.el.css({ left: b.x + 'px', top: b.y + 'px' });
+            }
+            //
+            start = ts;
+            window.requestAnimationFrame(draw);
+        }
+        //
+        function createBlock(id) {
+            let x = ((Math.random() * 400) + 200);
+            let y = ((Math.random() * 200) + 100);
+            // let x = ((Math.random() * 800) + 100);
+            // let y = ((Math.random() * 400) + 100);
+            const $b = $('<div/>', {
+                class: 'block',
+            })
+                .on('click', async () => {
+                    if (!clickable) return;
+                    if (order != id) return fail();
+                    $b.css({ 'background-color': '#2a486f' });
+                    if (order == blocks.length) return end();
+                    order++;
+                })
+                .text(id)
+                .css({
+                    left: x + 'px',
+                    top: y + 'px'
+                });
+            $game.append($b);
+            blocks.push({
+                el: $b, id, x, y,
+                dX: randomDir(), dY: randomDir(),
+                sX: 1, sY: 1
+            });
+        }
+        function fail() {
+            clear();
+            $failOverlay.show();
+        }
+        function end() {
+            clear();
+            $endOverlay.show();
+        }
+        async function clear() {
+            $overlay.show();
+            $game.hide();
+            working = false;
+            blocks.forEach(b => b.el.remove());
+            blocks = [];
+            await sleep(2000);
+            $failOverlay.hide();
+            $endOverlay.hide();
+            $settingsOverlay.show();
+        }
+        const randomDir = () => {
+            let dir = (Math.random() * 2) - 1;
+            if (dir < 0 && dir > -0.5) dir = -0.5;
+            if (dir > 0 && dir < 0.5) dir = 0.5;
+            if (dir == 0) dir = Math.random() < 0.5 ? 1 : -1;
+            return dir;
+        };
+    </script>
+</body>
+
+</html>
