@@ -369,9 +369,7 @@
         }
         const getRandomDir = () => {
             let dir = (Math.random() * 2) - 1;
-            if (dir < 0 && dir > -0.5) dir = -0.5;
-            if (dir > 0 && dir < 0.5) dir = 0.5;
-            if (dir == 0) dir = Math.random() < 0.5 ? 1 : -1;
+            if (Math.abs(dir) == 0.25) dir = Math.random() < 0.5 ? 1 : -1;
             return dir;
         };
     </script>
